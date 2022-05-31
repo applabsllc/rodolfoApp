@@ -43,7 +43,7 @@ const Screen2 = ({navigation}) => {
         "phone": option1value,
         "email": option2value,
        };
-       
+       console.log("sendObj2:",sendObj);
       if(name && description && option1value && option2value){
         fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Cbo', {
           method: 'POST',

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   SafeAreaView,
-  TextInput,
+  FlatList,
   StyleSheet,
   View,
   Text,
@@ -13,13 +13,22 @@ import {
 
 const Screen3 = ({navigation}) => {
 
-    const [name, setName] = useState("");
+    const [list, setList] = useState("");
+    const [isLoading, setIsLoading] = useState("");
 
-    const handleSubmit = () => {
+    const handleContinue = () => {
 
         navigation.navigate('Screen1', { screen: 'Screen1' });
 
     }
+
+    useEffect(() => {
+        fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Programs/')
+          .then((response) => response.json())
+          .then((json) => setList(json))
+          .catch((error) => console.error(error))
+          .finally(() => setIsLoading(false));
+      }, []);
 
     return (
         < >
@@ -28,11 +37,18 @@ const Screen3 = ({navigation}) => {
            <Text>Organizations:</Text>
           </View>
           <View>
-
+          { isLoading ? <Text>Loading...</Text> : (<FlatList
+            data={list}
+            keyExtractor={({ id }) => id}
+            renderItem={({ item }) => (
+              <Text>{item.id + ' - ' + item.name}</Text>
+            )}
+          />)
+          }
           </View>
          </View>
         <View style={styles.bottom}>
-          <Button onPress={handleSubmit} title="Continue" />
+          <Button onPress={handleContinue} title="Continue" />
         </View>
       </>
     );

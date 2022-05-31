@@ -28,6 +28,7 @@ const Screen1 = ({navigation}) => {
      "email": email,
     };
     console.log("sendObj1:",sendObj);
+    
     if(name && contact && phone && email){
       fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Cbo', {
         method: 'POST',
@@ -35,7 +36,7 @@ const Screen1 = ({navigation}) => {
       })
       .then((resp) => resp.json())
       .then((json) => {
-        console.log("Response:",json);
+        console.log("Response1:",json);
         navigation.navigate('Screen2', { screen: 'Screen2' });
       })
       .catch((err) => {
