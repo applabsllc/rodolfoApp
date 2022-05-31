@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import {
   SafeAreaView,
@@ -15,32 +13,36 @@ import {
 
 const Screen1 = ({navigation}) => {
   
-  let [name, setName] = useState("");
-  let [contact, setContact] = useState("");
-  let [email, setEmail] = useState("");
-  let [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
   const handleSubmit = () => {
 
     const sendObj = {
-     "id": 0,
+     "id": 9,
      "organizationName": name,
      "pointOfContact": contact,
      "phone": phone,
      "email": email,
     };
+    console.log("sendObj1:",sendObj);
+    if(name && contact && phone && email){
+      fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Cbo', {
+        method: 'POST',
+        body: JSON.stringify(sendObj),
+      })
+      .then((resp) => resp.json())
+      .then((json) => {
+        console.log("Response:",json);
+        navigation.navigate('Screen2', { screen: 'Screen2' });
+      })
+      .catch((err) => {
+        Alert.alert("Please Try Again");
+      });
+    }else Alert.alert("Please Complete Fields");
 
-    fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Cbo', {
-      method: 'POST',
-      body: JSON.stringify(sendObj),
-    })
-    .then((resp) => resp.json())
-    .then((json) => {
-      navigation.navigate('Screen2', { screen: 'Screen2' });
-    })
-    .catch((err) => {
-      Alert.alert("Please Try Again");
-    });
   }
 
   return (
