@@ -11,7 +11,7 @@ import {
 const Screen3 = ({navigation}) => {
 
     const [list, setList] = useState("");
-    const [isLoading, setIsLoading] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleContinue = () => navigation.navigate('Screen1', { screen: 'Screen1' });
 

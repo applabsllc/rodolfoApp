@@ -73,7 +73,6 @@ const Screen1 = ({navigation}) => {
       </View>
       <View style={styles.bottom}>
         <Button onPress={handleSubmit} title="Register" />
-        <Button onPress={() => navigation.navigate('Screen3', { screen: 'Screen3' })} title="View List" />
       </View>
     </>
   );
