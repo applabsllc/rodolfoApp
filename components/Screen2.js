@@ -35,16 +35,26 @@ const Screen2 = ({navigation}) => {
     const handleSubmit = () => {
 
       const sendObj = {
-        "organizationName": name,
-        "pointOfContact": description,
+        "name": name,
         "classification": option1Value,
         "status": option2Value,
-       };
-       
+        "cbo": {
+          "organizationName": "test",
+          "pointOfContact": "test",
+          "phone": "test",
+          "email": "test"
+        }
+      }
+
       if(name && option1Value && option2Value){
         fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Programs', {
           method: 'POST',
           body: JSON.stringify(sendObj),
+          headers: {
+            'Accept': 'application/json, text/plain',
+            'Content-Type': 'application/json;charset=UTF-8'
+          },
+          mode: 'cors',
         })
         .then((resp) => resp.json())
         .then((json) => {

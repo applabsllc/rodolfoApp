@@ -29,17 +29,22 @@ const Screen1 = ({navigation}) => {
   const handleSubmit = () => {
 
     const sendObj = {
+     "id": 0,
      "organizationName": name,
      "pointOfContact": contact,
      "phone": phone,
      "email": email,
     };
-    console.log("sendObj1:",sendObj);
     
     if(name && contact && validateNumber(phone) && validateEmail(email)){
       fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Cbo', {
         method: 'POST',
         body: JSON.stringify(sendObj),
+        headers: {
+          'Accept': 'application/json, text/plain',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        mode: 'cors',
       })
       .then((resp) => resp.json())
       .then((json) => {
