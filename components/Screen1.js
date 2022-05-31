@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import {
-  SafeAreaView,
   TextInput,
   StyleSheet,
   View,
@@ -18,10 +17,18 @@ const Screen1 = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
+  const validateNumber = (num) =>  !isNaN(num) && num.length == 10;
+
+  const validateEmail = (str) => {
+      let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+      if (reg.test(str) === true)
+      return true;
+      return false;
+  }
+
   const handleSubmit = () => {
 
     const sendObj = {
-     "id": 9,
      "organizationName": name,
      "pointOfContact": contact,
      "phone": phone,
@@ -29,25 +36,27 @@ const Screen1 = ({navigation}) => {
     };
     console.log("sendObj1:",sendObj);
     
-    if(name && contact && phone && email){
+    if(name && contact && validateNumber(phone) && validateEmail(email)){
       fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Cbo', {
         method: 'POST',
         body: JSON.stringify(sendObj),
       })
       .then((resp) => resp.json())
       .then((json) => {
-        console.log("Response1:",json);
+        if(json.status == 415)
+        Alert.alert("Error 415: "+json.title);
+        else
         navigation.navigate('Screen2', { screen: 'Screen2' });
       })
       .catch((err) => {
         Alert.alert("Please Try Again");
       });
-    }else Alert.alert("Please Complete Fields");
+    }else Alert.alert("Please Check Fields");
 
   }
 
   return (
-    < >
+    <>
       <View style={styles.top}>
         <View style={styles.header}>
          <Text>Community Based Organization</Text>
@@ -55,10 +64,11 @@ const Screen1 = ({navigation}) => {
         <TextInput style={styles.niceText} placeholder="Name" onChangeText={setName} value={name} />
         <TextInput style={styles.niceText} placeholder="Contact" onChangeText={setContact} value={contact} />
         <TextInput style={styles.niceText} placeholder="Email" onChangeText={setEmail} value={email} />
-        <TextInput style={styles.niceText} placeholder="Phone Number" onChangeText={setPhone} value={phone} />
+        <TextInput style={styles.niceText} placeholder="Phone Number" onChangeText={setPhone} value={phone} keyboardType='numeric' maxLength={10} />
       </View>
       <View style={styles.bottom}>
         <Button onPress={handleSubmit} title="Register" />
+        <Button onPress={() => navigation.navigate('Screen3', { screen: 'Screen3' })} title="View List" />
       </View>
     </>
   );
@@ -70,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#cfcfef",
   },
   header: {
-
+    margin: 5,
   },
   top: {
     flex: 2,

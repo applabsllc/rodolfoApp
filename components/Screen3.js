@@ -1,26 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-  SafeAreaView,
   FlatList,
   StyleSheet,
   View,
   Text,
   Button,
-  Alert,
 } from 'react-native';
-
 
 const Screen3 = ({navigation}) => {
 
     const [list, setList] = useState("");
     const [isLoading, setIsLoading] = useState("");
 
-    const handleContinue = () => {
-
-        navigation.navigate('Screen1', { screen: 'Screen1' });
-
-    }
+    const handleContinue = () => navigation.navigate('Screen1', { screen: 'Screen1' });
 
     useEffect(() => {
         fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Programs/')
@@ -31,7 +24,7 @@ const Screen3 = ({navigation}) => {
       }, []);
 
     return (
-        < >
+      <>
         <View style={styles.top}>
           <View style={styles.header}>
            <Text>Organizations:</Text>
@@ -41,7 +34,7 @@ const Screen3 = ({navigation}) => {
             data={list}
             keyExtractor={({ id }) => id}
             renderItem={({ item }) => (
-              <Text>{item.id + ' - ' + item.name}</Text>
+              <Text>{item.name + ' - ' + item.classification}</Text>
             )}
           />)
           }
@@ -61,7 +54,7 @@ const styles = StyleSheet.create({
       backgroundColor: "#cfcfef",
     },
     header: {
-  
+      margin: 5,
     },
     top: {
       flex: 2,
