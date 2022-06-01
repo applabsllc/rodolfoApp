@@ -16,9 +16,21 @@ const Screen3 = ({navigation}) => {
     const handleContinue = () => navigation.navigate('Screen1', { screen: 'Screen1' });
 
     useEffect(() => {
+      let finalItems = [];
         fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Programs/')
           .then((response) => response.json())
-          .then((json) => setList(json))
+          .then((listItems) => {
+            listItems.map((item,k) => {
+              fetch('https://reactassessmentapi20220523183259.azurewebsites.net/api/Cbo/'+item.id)
+              .then((response) => response.json())
+              .then((cbo) => {
+                listItems[k].pointOfContact = cbo.pointOfContact;
+                finalItems.push(listItems[k]);
+              })
+              .catch((error) => console.error(error))
+              .finally(() => setList(finalItems));
+            });  
+          })
           .catch((error) => console.error(error))
           .finally(() => setIsLoading(false));
       }, []);
@@ -34,7 +46,7 @@ const Screen3 = ({navigation}) => {
             data={list}
             keyExtractor={({ id }) => id}
             renderItem={({ item }) => (
-              <Text>{item.name + ' - ' + item.classification}</Text>
+              <Text>{item.name + ' - ' + item.classification + ' - ' + item.pointOfContact}</Text>
             )}
           />)
           }
